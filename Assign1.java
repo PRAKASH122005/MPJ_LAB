@@ -70,12 +70,9 @@ public class Assign1 {
     }
 }
 
-// kunaltailor@Kunals-MacBook-Air Lab2 % cd ..
-// kunaltailor@Kunals-MacBook-Air MPJ % cd Lab1
-// kunaltailor@Kunals-MacBook-Air Lab1 % javac Assign1.java
-// kunaltailor@Kunals-MacBook-Air Lab1 % java Assign1
-// Enter Name: Kunal
-// Enter Roll No: 38
+
+// Enter Name: Prakash
+// Enter Roll No: 40
 // Enter marks of 5 subjects:
 // Subject 1: 89
 // Subject 2: 87
@@ -83,9 +80,8 @@ public class Assign1 {
 // Subject 4: 89
 // Subject 5: 98
 
-// Name       : Kunal
-// Roll No    : 38
+// Name       : Praksh
+// Roll No    : 40
 // Marks      : 89 87 88 89 98 
 // Percentage : 90.2
 // Grade      : A
-// kunaltailor@Kunals-MacBook-Air Lab1 % 
