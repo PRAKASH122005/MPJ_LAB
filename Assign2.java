@@ -49,10 +49,6 @@ public class Assign2 {
     }
 }
 
-
-// unaltailor@Kunals-MacBook-Air MPJ % cd Lab2
-// kunaltailor@Kunals-MacBook-Air Lab2 % javac Assign2.java
-// kunaltailor@Kunals-MacBook-Air Lab2 % java Assign2
 // Full time employee before hike : 
 // Salary : 40000.0
 // Full time employee salary after hike : 
@@ -62,4 +58,3 @@ public class Assign2 {
 // Salary : 20000.0
 // Intern employee salary after hike : 
 // Salary : 25000.0
-// kunaltailor@Kunals-MacBook-Air Lab2 % 
