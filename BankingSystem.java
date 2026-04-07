@@ -1,145 +1,170 @@
 import java.io.*;
 import java.util.*;
 
+// Custom Exception
 class BankException extends Exception {
-BankException(String msg) {
-super(msg);
-}
+    BankException(String msg) {
+        super(msg);
+    }
 }
 
+// Customer Class
 class Customer {
-int cid;
-String cname;
-double amount;
+    int cid;
+    String cname;
+    double amount;
 
-Customer(int cid, String cname, double amount) throws BankException {
-if (cid < 1 || cid > 20)
-throw new BankException("CID must be between 1 and 20");
+    // Constructor
+    Customer(int cid, String cname, double amount) throws BankException {
+        if (cid < 1 || cid > 20)
+            throw new BankException("CID must be between 1 and 20");
 
-if (amount < 1000)
-throw new BankException("Minimum balance must be 1000");
+        if (amount < 1000)
+            throw new BankException("Minimum balance must be 1000");
 
-this.cid = cid;
-this.cname = cname;
-this.amount = amount;
+        this.cid = cid;
+        this.cname = cname;
+        this.amount = amount;
+    }
+
+    // Deposit Method
+    void deposit(double amt) throws BankException {
+        if (amt <= 0)
+            throw new BankException("Deposit must be positive");
+
+        amount += amt;
+    }
+
+    // Withdraw Method
+    void withdraw(double amt) throws BankException {
+        if (amt > amount)
+            throw new BankException("Insufficient balance");
+
+        amount -= amt;
+    }
+
+    // Display Method
+    void display() {
+        System.out.println(cid + " " + cname + " " + amount);
+    }
 }
 
-void deposit(double amt) throws BankException {
-if (amt <= 0)
-throw new BankException("Deposit must be positive");
-amount += amt;
-}
-
-void withdraw(double amt) throws BankException {
-if (amt > amount)
-throw new BankException("Insufficient balance");
-amount -= amt;
-}
-
-void display() {
-System.out.println(cid + " " + cname + " " + amount);
-}
-}
-
+// Main Class
 public class BankingSystem {
-public static void main(String[] args) {
 
-Scanner sc = new Scanner(System.in);
-ArrayList<Customer> list = new ArrayList<>();
-int choice;
+    public static void main(String[] args) {
 
-do {
-System.out.println("\n--- MENU ---");
-System.out.println("1. Create Account");
-System.out.println("2. Deposit");
-System.out.println("3. Withdraw");
-System.out.println("4. Display All");
-System.out.println("5. Exit");
+        Scanner sc = new Scanner(System.in);
+        ArrayList<Customer> list = new ArrayList<>();
+        int choice;
 
-choice = sc.nextInt();
+        do {
+            System.out.println("\n--- MENU ---");
+            System.out.println("1. Create Account");
+            System.out.println("2. Deposit");
+            System.out.println("3. Withdraw");
+            System.out.println("4. Display All");
+            System.out.println("5. Exit");
 
-try {
-switch (choice) {
+            System.out.print("Enter choice: ");
+            choice = sc.nextInt();
 
-case 1:
-System.out.print("Enter CID: ");
-int cid = sc.nextInt();
+            try {
+                switch (choice) {
 
-if (findCustomer(list, cid) != null)
-throw new BankException("Account with CID " + cid + " already exists");
+                    case 1:
+                        System.out.print("Enter CID: ");
+                        int cid = sc.nextInt();
 
-System.out.print("Enter Name: ");
-String name = sc.next();
-System.out.print("Enter Amount: ");
-double amt = sc.nextDouble();
+                        if (findCustomer(list, cid) != null)
+                            throw new BankException("Account with CID " + cid + " already exists");
 
-Customer c = new Customer(cid, name, amt);
-list.add(c);
+                        System.out.print("Enter Name: ");
+                        String name = sc.next();
 
-BufferedWriter bw = new BufferedWriter(new FileWriter("customer.txt", true));
-bw.write(cid + " " + name + " " + amt);
-bw.newLine();
-bw.close();
+                        System.out.print("Enter Amount: ");
+                        double amt = sc.nextDouble();
 
-System.out.println("Account created!");
-break;
+                        Customer c = new Customer(cid, name, amt);
+                        list.add(c);
 
-case 2:
-System.out.print("Enter CID: ");
-int d_id = sc.nextInt();
-Customer d_cust = findCustomer(list, d_id);
-if (d_cust == null)
-throw new BankException("Customer not found");
-System.out.print("Enter deposit amount: ");
-double d_amt = sc.nextDouble();
-d_cust.deposit(d_amt);
-System.out.println("Deposit successful!");
-break;
+                        // File Writing
+                        BufferedWriter bw = new BufferedWriter(new FileWriter("customer.txt", true));
+                        bw.write(cid + " " + name + " " + amt);
+                        bw.newLine();
+                        bw.close();
 
-case 3:
-System.out.print("Enter CID: ");
-int w_id = sc.nextInt();
-Customer w_cust = findCustomer(list, w_id);
-if (w_cust == null)
-throw new BankException("Customer not found");
-System.out.print("Enter withdraw amount: ");
-double w_amt = sc.nextDouble();
-w_cust.withdraw(w_amt);
-System.out.println("Withdraw successful!");
-break;
+                        System.out.println("Account created!");
+                        break;
 
-case 4:
-for (Customer cust : list)
-cust.display();
-break;
+                    case 2:
+                        System.out.print("Enter CID: ");
+                        int d_id = sc.nextInt();
 
-case 5:
-System.out.println("Exiting...");
-break;
+                        Customer d_cust = findCustomer(list, d_id);
+                        if (d_cust == null)
+                            throw new BankException("Customer not found");
 
-default:
-System.out.println("Invalid choice. Enter 1-5.");
-}
+                        System.out.print("Enter deposit amount: ");
+                        double d_amt = sc.nextDouble();
 
-} catch (BankException e) {
-System.out.println("Error: " + e.getMessage());
-} catch (IOException e) {
-System.out.println("File error");
-} catch (Exception e) {
-System.out.println("Invalid input");
-sc.nextLine();
-}
+                        d_cust.deposit(d_amt);
+                        System.out.println("Deposit successful!");
+                        break;
 
-} while (choice != 5);
+                    case 3:
+                        System.out.print("Enter CID: ");
+                        int w_id = sc.nextInt();
 
-sc.close();
-}
+                        Customer w_cust = findCustomer(list, w_id);
+                        if (w_cust == null)
+                            throw new BankException("Customer not found");
 
-static Customer findCustomer(ArrayList<Customer> list, int cid) {
-for (Customer c : list) {
-if (c.cid == cid)
-return c;
-}
-return null;
-}
+                        System.out.print("Enter withdraw amount: ");
+                        double w_amt = sc.nextDouble();
+
+                        w_cust.withdraw(w_amt);
+                        System.out.println("Withdraw successful!");
+                        break;
+
+                    case 4:
+                        if (list.isEmpty()) {
+                            System.out.println("No customers found.");
+                        } else {
+                            for (Customer cust : list) {
+                                cust.display();
+                            }
+                        }
+                        break;
+
+                    case 5:
+                        System.out.println("Exiting...");
+                        break;
+
+                    default:
+                        System.out.println("Invalid choice. Enter 1-5.");
+                }
+
+            } catch (BankException e) {
+                System.out.println("Error: " + e.getMessage());
+            } catch (IOException e) {
+                System.out.println("File error");
+            } catch (Exception e) {
+                System.out.println("Invalid input");
+                sc.nextLine(); // clear buffer
+            }
+
+        } while (choice != 5);
+
+        sc.close();
+    }
+
+    // Method to find customer
+    static Customer findCustomer(ArrayList<Customer> list, int cid) {
+        for (Customer c : list) {
+            if (c.cid == cid)
+                return c;
+        }
+        return null;
+    }
 }
